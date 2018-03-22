@@ -5962,27 +5962,27 @@ enabled libv4l2           && require_pkg_config libv4l2 libv4l2 libv4l2.h v4l2_i
 enabled libvidstab        && require_pkg_config libvidstab "vidstab >= 0.98" vid.stab/libvidstab.h vsMotionDetectInit
 enabled libvmaf           && require_pkg_config libvmaf "libvmaf >= 0.6.2" libvmaf.h compute_vmaf
 enabled libvo_amrwbenc    && require libvo_amrwbenc vo-amrwbenc/enc_if.h E_IF_init -lvo-amrwbenc
-enabled libvorbis         && require_pkg_config libvorbis vorbis vorbis/codec.h vorbis_info_init &&
-                             require_pkg_config libvorbisenc vorbisenc vorbis/vorbisenc.h vorbis_encode_init
+enabled libvorbis         && require_pkg_config libvorbis vorbis vorbis/codec.h vorbis_info_init -llibvorbis_static -llibogg_static &&
+                             require_pkg_config libvorbisenc vorbisenc vorbis/vorbisenc.h vorbis_encode_init -llibvorbis_static -llibogg_static 
 
 enabled libvpx            && {
     enabled libvpx_vp8_decoder && {
         check_pkg_config libvpx_vp8_decoder "vpx >= 1.4.0" "vpx/vpx_decoder.h vpx/vp8dx.h" vpx_codec_vp8_dx ||
-            check_lib libvpx_vp8_decoder "vpx/vpx_decoder.h vpx/vp8dx.h" "vpx_codec_dec_init_ver VPX_IMG_FMT_HIGHBITDEPTH" -lvpx ||
+            check_lib libvpx_vp8_decoder "vpx/vpx_decoder.h vpx/vp8dx.h" "vpx_codec_dec_init_ver VPX_IMG_FMT_HIGHBITDEPTH" -lvpxmd ||
                 die "ERROR: libvpx decoder version must be >=1.4.0";
     }
     enabled libvpx_vp8_encoder && {
         check_pkg_config libvpx_vp8_encoder "vpx >= 1.4.0" "vpx/vpx_encoder.h vpx/vp8cx.h" vpx_codec_vp8_cx ||
-            check_lib libvpx_vp8_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_enc_init_ver VPX_IMG_FMT_HIGHBITDEPTH" -lvpx ||
+            check_lib libvpx_vp8_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_enc_init_ver VPX_IMG_FMT_HIGHBITDEPTH" -lvpxmd ||
                 die "ERROR: libvpx encoder version must be >=1.4.0";
     }
     enabled libvpx_vp9_decoder && {
         check_pkg_config libvpx_vp9_decoder "vpx >= 1.4.0" "vpx/vpx_decoder.h vpx/vp8dx.h" vpx_codec_vp9_dx ||
-            check_lib libvpx_vp9_decoder "vpx/vpx_decoder.h vpx/vp8dx.h" "vpx_codec_vp9_dx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs"
+            check_lib libvpx_vp9_decoder "vpx/vpx_decoder.h vpx/vp8dx.h" "vpx_codec_vp9_dx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpxmd $libm_extralibs"
     }
     enabled libvpx_vp9_encoder && {
         check_pkg_config libvpx_vp9_encoder "vpx >= 1.4.0" "vpx/vpx_encoder.h vpx/vp8cx.h" vpx_codec_vp9_cx ||
-            check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpx $libm_extralibs"
+            check_lib libvpx_vp9_encoder "vpx/vpx_encoder.h vpx/vp8cx.h" "vpx_codec_vp9_cx VPX_IMG_FMT_HIGHBITDEPTH" "-lvpxmd $libm_extralibs"
     }
     if disabled_all libvpx_vp8_decoder libvpx_vp9_decoder libvpx_vp8_encoder libvpx_vp9_encoder; then
         die "libvpx enabled but no supported decoders found"
